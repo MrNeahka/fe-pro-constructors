@@ -26,36 +26,21 @@ export function Book(title, year, publicationBy, authors) {
 
     publicationBy.myBooks.push(this);
 
-    function connectString (massObj) {
-        const sortArr = massObj.filter((it, index) => index === massObj.indexOf(it.trim()));
-        return sortArr.join(', ');
-    }
-
     Object.defineProperty(this, "suggestedBooks", {
         get(){
-            const nameBooks = [];
-            authors.map(item => {
-                item.books.map(item => {
-                    if (item !== this){
-                        nameBooks.push(item.title);
-                    }
-                })
-            })
-            return connectString(nameBooks);
+           return authors.reduce((acc, item) => {
+                const bookName = new Set (item.books.map((title) => title));
+                return [...bookName];
+            }, []).filter(title => title !== this).map(({ title } )=> title).join(', ');
         }
     })
 
     Object.defineProperty(this, 'suggestedPublicators', {
         get() {
-            const massName = [];
-           this.authors.map(item =>{
-               item.books.map(item => {
-                   if (item.publicationBy.name !== this.publicationBy.name) {
-                       massName.push(item.publicationBy.name);
-                   }
-               })
-           })
-            return connectString(massName);
+            return authors.reduce((acc, item) => {
+                const massName = new Set (item.books.map((book) => book.publicationBy));
+                return [...massName];
+            }, []).filter(item => item !== this.publicationBy).map(({ name } )=> name).join(', ');
         }
     })
 

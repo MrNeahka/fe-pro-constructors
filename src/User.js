@@ -17,48 +17,33 @@ export function User(name, date) {
   this.friends = [];
   this.likes = [];
 
-  //есть так же две похожее функции пытался их объединить, но не получается, код того как я их пытался объединить в copy_User.js
-  this.addAndRemoveFriends = (User) => {//отказывается проходить тест на структуру всего User, так как считается Анонимной(как исправить не знаю)
-    if(this.friends.length === 0) {
-      this.friends.push(User);
-      User.friends.push(this);
+
+  this.addAndRemoveFriends = (user) => {
+    if(this.friends.includes(user)){
+      this.friends = this.friends.filter(item => item !== user);
+      user.friends = user.friends.filter(item => item !== this);
       return;
     }
-    this.friends.map(item => {
-      if (item === User){
-        this.friends = this.friends.filter(item => item !== User);
-        User.friends = User.friends.filter(item => item !== this);
-      }else{
-        this.friends.push(User);
-        User.friends.push(this);
-      }
-    })
+    this.friends.push(user);
+    user.friends.push(this);
   }
 
-  this.addToFriends = (User) => {
-    this.addAndRemoveFriends(User);
+  this.addToFriends = (user) => {
+    this.addAndRemoveFriends(user);
   }
 
-  this.removeFriend = (User) => {
-    this.addAndRemoveFriends(User);
+  this.removeFriend = (user) => {
+    this.addAndRemoveFriends(user);
   }
 
-  this.likeAndUnlikeBook = (Book) => { //отказывается проходить тест на структуру всего User, так как считается Анонимной(как исправить не знаю)
-    if(this.likes.length === 0){
-      this.likes.push(Book);
-      Book.likedUsers.push(this);
-      return;
-    }
-    this.likes.map(item => {
-      if (item === Book){
-        this.likes = this.likes.filter(item => item !== Book);
-        Book.likedUsers = Book.likedUsers.filter(item => item !== this);
-      }else{
-        this.likes.push(Book);
-        Book.likedUsers.push(this);
-      }
-    })
-
+  this.likeAndUnlikeBook = (book) => {
+   if(this.likes.includes(book)){
+     this.likes = this.likes.filter(item => item !== book);
+     book.likedUsers = book.likedUsers.filter(item => item !== this);
+     return;
+   }
+   this.likes.push(book);
+   book.likedUsers.push(this);
   }
 
   this.likeBook = (Book) =>{
@@ -69,7 +54,7 @@ export function User(name, date) {
     this.likeAndUnlikeBook(Book);
   }
 
-  this.connectInTheOneStr = (inputArray, name) => { //отказывается проходить тест на структуру всего User, так как считается Анонимной(как исправить не знаю)
+  this.connectInTheOneStr = (inputArray, name) => {
     const res =  inputArray.reduce((acc, item) => {
         acc.push(item[name]);
         return acc;
